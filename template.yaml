@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  linkup-trigger
+
+  Sample SAM Template for linkup-trigger
+
+Globals:
+  Function:
+    Timeout: 90
+
+Resources:
+  LinkupTriggerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: linkup/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Environment:
+        Variables:
+          DESTINATION_QUEUE: 'linkup-work-queue'
+      Events:
+        Scheduled:
+          Type: Schedule
+          Properties:
+            Schedule: 'cron(0 10 * * ? *)'
+
+
+
+Outputs:
+  LinkupTriggerFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt LinkupTriggerFunction.Arn
+  LinkupTriggerFunctionIamRole:
+    Description: "Implicit IAM Role created for function"
+    Value: !GetAtt LinkupTriggerFunctionRole.Arn
