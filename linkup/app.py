@@ -38,9 +38,9 @@ def extract_processing_date_or_today(event):
 def pump_sqs_messages(queue, single_date):
     formatted_date = single_date.strftime('%Y-%m-%d')
     enqueue(queue, "scrape_daily", formatted_date)
-    enqueue(queue, "job_records+descriptions", formatted_date)
-    # todo: more units of work
-    # enqueue(queue, "scrape_daily", formatted_date)
+    enqueue(queue, "job_records+descriptions_daily", formatted_date)
+    enqueue(queue, "ticker_daily", formatted_date)
+    enqueue(queue, "company_reference_daily", formatted_date)
 
 
 def enqueue(queue, unit_of_work, formatted_date):
