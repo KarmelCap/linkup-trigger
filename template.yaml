@@ -23,7 +23,7 @@ Resources:
         Scheduled:
           Type: Schedule
           Properties:
-            Schedule: 'cron(0 10 * * ? *)'
+            Schedule: 'cron(30 6 * * ? *)'
 
 
 
