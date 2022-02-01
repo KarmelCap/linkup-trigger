@@ -41,6 +41,7 @@ def pump_sqs_messages(queue, single_date):
     enqueue(queue, "job_records+descriptions_daily", formatted_date)
     enqueue(queue, "ticker_daily", formatted_date)
     enqueue(queue, "company_reference_daily", formatted_date)
+    enqueue(queue, "core_company_analytics_report", formatted_date)
 
 
 def enqueue(queue, unit_of_work, formatted_date):
