@@ -18,21 +18,26 @@ def lambda_handler(event, context):
 def process(event, queue):
     start_processing_date = extract_processing_date_or_today(event)
     print("start_processing_date: " + str(start_processing_date))
-    dates_to_process = build_date_range(start_processing_date, date.today())
+    dates_to_process = build_date_range_starting_with_yesterday(start_processing_date, date.today())
     print("dates_to_process: " + str(dates_to_process))
     for single_date in dates_to_process:
         pump_sqs_messages(queue, single_date)
 
 
-def build_date_range(start_date, end_date):
-    return [date.today()] + [start_date + datetime.timedelta(days=x) for x in range(0, (end_date - start_date).days)]
+def yesterday():
+    return date.today() - datetime.timedelta(days=1)
+
+
+# returns a list of dates between start and end starting with YESTERDAY!
+def build_date_range_starting_with_yesterday(start_date, end_date):
+    return [yesterday()] + [start_date + datetime.timedelta(days=x) for x in range(0, (end_date - start_date).days)]
 
 
 def extract_processing_date_or_today(event):
     try:
         return datetime.datetime.strptime(str(event['detail']['start-processing-date']), '%Y-%m-%d').date()
     except KeyError:
-        return date.today()
+        return yesterday()
 
 
 def pump_sqs_messages(queue, single_date):

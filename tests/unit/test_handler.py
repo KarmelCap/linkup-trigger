@@ -1,11 +1,10 @@
 import datetime
-import json
 import os
+from unittest.mock import Mock
 
 import dateutil.utils
 import pytest
-from unittest.mock import Mock
-import boto3
+
 from linkup import app
 
 os.environ['DESTINATION_QUEUE'] = 'testerqueuer'
@@ -47,13 +46,13 @@ def cloudwatch_event_with_processing_date():
 
 
 def test_date_range_same_date():
-    results = app.build_date_range(dateutil.utils.today(), dateutil.utils.today())
+    results = app.build_date_range_starting_with_yesterday(dateutil.utils.today(), dateutil.utils.today())
     assert len(results) == 1
 
 
 def test_date_range_2_days():
-    results = app.build_date_range(datetime.datetime.strptime("21-06-2014", "%d-%m-%Y"),
-                                   datetime.datetime.strptime("22-06-2014", "%d-%m-%Y"))
+    results = app.build_date_range_starting_with_yesterday(datetime.datetime.strptime("21-06-2014", "%d-%m-%Y"),
+                                                           datetime.datetime.strptime("22-06-2014", "%d-%m-%Y"))
     assert len(results) == 2
 
 
